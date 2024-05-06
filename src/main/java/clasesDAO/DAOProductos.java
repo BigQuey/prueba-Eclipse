@@ -68,6 +68,7 @@ public class DAOProductos implements IntProductos {
 			e.printStackTrace();
 		} finally {
 			try {
+				if(rs != null) rs.close();
 				if (psm != null)
 					psm.close();
 				if (cn != null)
@@ -81,11 +82,12 @@ public class DAOProductos implements IntProductos {
 
 	@Override
 	public Producto obtenerProducto(int id) {
-		Producto prod = new Producto();
+		Producto prod = null;
 		try {
 			cn = MysqlConexion.getConexion();
 			String sql = "SELECT * Producto where idProducto=?";
 			psm = cn.prepareStatement(sql);
+			psm.setInt(1, id);
 			rs = psm.executeQuery();
 			if (rs.next()) {
 				prod = new Producto();
@@ -100,6 +102,7 @@ public class DAOProductos implements IntProductos {
 			e.printStackTrace();
 		} finally {
 			try {
+				if(rs != null) rs.close();
 				if (psm != null)
 					psm.close();
 				if (cn != null)
@@ -132,16 +135,23 @@ public class DAOProductos implements IntProductos {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return producto;
 	}
 
 	@Override
-	public int editarProducto(Producto producto) {
+	public int editarProducto(Producto prod) {
 		int value = 0;
 		try {
 			cn = MysqlConexion.getConexion();
-			String sql = "UPDATE Productos SET codProducto=?, nomProducto=?, precProducto=?, stockProducto=? WHERE idProducto=?";
-			
+			String sql = "UPDATE Producto SET codProducto=?, nomProducto=?, precProducto=?, stockProducto=? WHERE idProducto=?";
+			psm = cn.prepareStatement(sql);
+			psm.setString(1, prod.getCodProd());
+			psm.setString(2, prod.getNombre());
+			psm.setDouble(3, prod.getPrecio());
+			psm.setInt(4, prod.getStock());
+			psm.setInt(5, prod.getIdProducto());
+
+			value = psm.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
@@ -154,17 +164,32 @@ public class DAOProductos implements IntProductos {
 				e.printStackTrace();
 			}
 		}
-		return 0;
+		return value;
 	}
 
 	@Override
 	public List<Producto> bucarProducto(String cod) {
+		List<Producto> prodList = new ArrayList<Producto>();
 		try {
-
+			cn = MysqlConexion.getConexion();
+			String sql = "SELECT * from Producto WHERE idProducto=?";
+			psm = cn.prepareStatement(sql);
+			psm.setString(1, cod);
+			rs = psm.executeQuery();
+			while(rs.next()) {
+				Producto prod = new Producto();
+				prod.setIdProducto(rs.getInt("idProducto"));
+				prod.setCodProd(rs.getString("codProducto"));
+				prod.setNombre(rs.getString("nomProducto"));
+				prod.setPrecio(rs.getDouble("precProducto"));
+				prod.setStock(rs.getInt("stockProducto"));
+				prodList.add(prod);
+			}
 		} catch (Exception e) {
-
+			e.printStackTrace();
 		} finally {
 			try {
+				if(rs != null) rs.close();
 				if (psm != null)
 					psm.close();
 				if (cn != null)
@@ -173,7 +198,7 @@ public class DAOProductos implements IntProductos {
 				e.printStackTrace();
 			}
 		}
-		return null;
+		return prodList;
 	}
 
 }

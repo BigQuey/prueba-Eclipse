@@ -2,9 +2,9 @@ package modelo;
 
 public class Venta {
 	private int idVenta;
-	private String codCliente;
+	private String dniCliente;
 	private String codVendedor;
-	private int total;
+	private double total;
 	private int cantProductos;
 	private String producto;
 	private String fechaCompra;
@@ -23,11 +23,11 @@ public class Venta {
 		this.idVenta = idVenta;
 	}
 
-	public String getCodCliente() {
-		return codCliente;
+	public String getDniCliente() {
+		return dniCliente;
 	}
-	public void setCodCliente(String codCliente) {
-		this.codCliente = codCliente;
+	public void setDniCliente(String dniCliente) {
+		this.dniCliente = dniCliente;
 	}
 	public String getCodVendedor() {
 		return codVendedor;
@@ -35,10 +35,10 @@ public class Venta {
 	public void setCodVendedor(String codVendedor) {
 		this.codVendedor = codVendedor;
 	}
-	public int getTotal() {
+	public double getTotal() {
 		return total;
 	}
-	public void setTotal(int total) {
+	public void setTotal(double total) {
 		this.total = total;
 	}
 	public String getProducto() {
