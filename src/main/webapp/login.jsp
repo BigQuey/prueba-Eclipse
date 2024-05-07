@@ -11,7 +11,7 @@
 <div class="container">
     <br>
     <div class="col-lg-6">
-        <form action="ServletLogin" method="post" id="id_form">
+        <form action="ServletSesion" method="post" id="id_form">
             <input type="hidden" name="type" value="login">
             <div class="form-group">
                 <label>Correo:</label>
